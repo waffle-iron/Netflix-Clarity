@@ -1,5 +1,5 @@
 'use strict';
-import {TITLE_CLASS} from './constants';
+const TILE_CLASS = 'title_card';
 export default class DomTools{
 	constructor(props) {
 	}

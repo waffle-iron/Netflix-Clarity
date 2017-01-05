@@ -1,6 +1,6 @@
 'use strict';
-import {LABEL_ATTR} from './constants';
-import DomTools from './domtools';
+const LABEL_ATTR = 'aria-label';
+import DomTools from './domtools.babel';
 
 export default class Renderer{
 	constructor(props) {

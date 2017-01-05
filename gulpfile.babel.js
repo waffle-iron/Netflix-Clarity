@@ -4,6 +4,8 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import del from 'del';
 import runSequence from 'run-sequence';
 import {stream as wiredep} from 'wiredep';
+import browserify from "browserify";
+import fs from 'fs';
 
 const $ = gulpLoadPlugins();
 
@@ -80,23 +82,23 @@ gulp.task('chromeManifest', () => {
 });
 
 gulp.task('babel', () => {
-  return gulp.src('app/scripts.babel/**/*.js')
-      .pipe($.babel({
-        presets: ['es2015']
-      }))
-      .pipe(gulp.dest('app/scripts'))
+  return browserify('app/scripts.babel/lib/app.babel.js')
+  .transform('babelify', {
+    presets: ["es2015"]
+  })
+  .bundle()
+  .pipe(fs.createWriteStream('app/scripts/contentscript.js'))
 });
 
-gulp.task('browserify', () =>{
-  return gulp.src('app/scripts/**/*.js')
-  .pipe($.browserify())
-  .pipe(gulp.dest('app/scripts'))
+gulp.task('move', () =>{
+  return gulp.src('app/scripts.babel/*.js')
+  .pipe(gulp.dest('app/scripts/'))
 })
 
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('watch', ['lint', 'babel', 'browserify'], () => {
+gulp.task('watch', ['lint', 'babel', 'move'], () => {
   $.livereload.listen();
 
   gulp.watch([
@@ -107,7 +109,7 @@ gulp.task('watch', ['lint', 'babel', 'browserify'], () => {
     'app/_locales/**/*.json'
   ]).on('change', $.livereload.reload);
 
-  gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel', 'browserify']);
+  gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel', 'move']);
   gulp.watch('bower.json', ['wiredep']);
 });
 
