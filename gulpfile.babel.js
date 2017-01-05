@@ -84,12 +84,19 @@ gulp.task('babel', () => {
       .pipe($.babel({
         presets: ['es2015']
       }))
-      .pipe(gulp.dest('app/scripts'));
+      .pipe(gulp.dest('app/scripts'))
 });
+
+gulp.task('browserify', () =>{
+  return gulp.src('app/scripts/**/*.js')
+  .pipe($.browserify())
+  .pipe(gulp.dest('app/scripts'))
+})
+
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('watch', ['lint', 'babel'], () => {
+gulp.task('watch', ['lint', 'babel', 'browserify'], () => {
   $.livereload.listen();
 
   gulp.watch([
@@ -100,7 +107,7 @@ gulp.task('watch', ['lint', 'babel'], () => {
     'app/_locales/**/*.json'
   ]).on('change', $.livereload.reload);
 
-  gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel']);
+  gulp.watch('app/scripts.babel/**/*.js', ['lint', 'babel', 'browserify']);
   gulp.watch('bower.json', ['wiredep']);
 });
 
