@@ -6,7 +6,6 @@ export default class Clarity{
 	}
 
 	load(){
-		console.log('Load')
 		if(!this.valid){
 			return;
 		}

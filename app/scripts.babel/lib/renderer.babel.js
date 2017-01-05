@@ -9,6 +9,6 @@ export default class Renderer{
 	}
 
 	render(){
-	console.log(this.tiles);
+	
 	}
 }
