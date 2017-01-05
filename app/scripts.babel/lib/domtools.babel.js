@@ -14,12 +14,16 @@ export default class DomTools{
 			
 			this.setMutationObserver(el[0], MUTATION_OPTIONS, this.hasPopoverMutation.bind(this));
 			this.pubsub.subscribe(MUTATION_PUBSUB, (e)=>{
-				let node = e.mutation.target.parentNode;
-				console.log(n);
+				console.log(e.mutation);
+				let node = e.mutation.target.parentElement;
 				if(!node) return;
+				let title = node.querySelectorAll(':scope .bob-title');
+				let year = node.querySelectorAll(':scope .year');
+				console.log(title);
+				if(!title) throw new Error("No title found, cannot search");
 				let data = {
-					name: node.querySelector('.bob-title'),
-					year: node.querySelector('.year')
+					name: title[0].innerText,
+					year: year[0].innerText
 				}
 				console.log(data);
 
