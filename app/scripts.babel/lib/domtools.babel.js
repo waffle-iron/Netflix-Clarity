@@ -13,23 +13,23 @@ export default class DomTools{
 		if(el && !!el.length){
 			
 			this.setMutationObserver(el[0], MUTATION_OPTIONS, this.hasPopoverMutation.bind(this));
-			this.pubsub.subscribe(MUTATION_PUBSUB, (e)=>{
-				let node = e.mutation.target.parentNode;
-				console.log(n);
-				if(!node) return;
-				let data = {
-					name: node.querySelector('.bob-title'),
-					year: node.querySelector('.year')
-				}
-				console.log(data);
-
-			})
+			this.pubsub.subscribe(MUTATION_PUBSUB, this.getMetaData)
 		}else{
-			throw new Error("Cannot find MAIN_VIEW")
+			throw new Error('Cannot find MAIN_VIEW')
 		}
 		
 	}
-
+	getMetaData(e){
+		let node = e.mutation.target.parentElement;
+		if(!node) return;
+		let nameNode = node.querySelector('.bob-title');
+		let yearNode = node.querySelector(':scope .year');
+		return {
+			name: nameNode === null ? null : nameNode.textContent,
+			year:  yearNode === null ? null : yearNode.textContent,
+			inProgress: node.querySelector(':scope .progress') !== null
+		}
+	}
 	setMutationObserver(target, options, cb){
 		var observer = new MutationObserver(function(a) {
 			cb(a)
@@ -48,12 +48,13 @@ export default class DomTools{
 	}
 	checkForClass(elems){
 		return Array.prototype.slice.call(elems).find(function(elem){
-			return elem.classList.contains("bob-card")
+			if(!elem.classList) return false;
+			return elem.classList.contains('bob-card')
 		});
 	}
 	hasPopoverMutation(mutations){
 		let validMutation = mutations.find((mutation)=>{
-			return mutation && mutation.type === "childList" && mutation.addedNodes.length > 0 && this.checkForClass(mutation.addedNodes);
+			return mutation && mutation.type === 'childList' && mutation.addedNodes.length > 0 && this.checkForClass(mutation.addedNodes);
 		});
 
 		if(validMutation){
