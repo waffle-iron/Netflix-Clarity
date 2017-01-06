@@ -27,7 +27,7 @@ export default class Renderer{
 			inProgress: node.querySelector(':scope .progress') !== null
 		}
 
-			const OMDB_ENDPOINT = 'https://www.omdbapi.com/?plot=short&r=json';
+			const OMDB_ENDPOINT = 'https://www.omdbapi.com/?plot=short&r=json&tomatoes=true';
 
 			// let title = "The OA";
 			// let year = 2016
