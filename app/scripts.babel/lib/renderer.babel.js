@@ -26,6 +26,17 @@ export default class Renderer{
 			year:  yearNode === null ? null : yearNode.textContent,
 			inProgress: node.querySelector(':scope .progress') !== null
 		}
+
+			const OMDB_ENDPOINT = 'https://www.omdbapi.com/?plot=short&r=json';
+
+			// let title = "The OA";
+			// let year = 2016
+			fetch(`${OMDB_ENDPOINT}&t=${data.name}&y=${data.year}`).then(function(res){
+				res.json().then(function(data) {  
+			        console.log(data);  
+			      }); 
+			})
+
 		//TODO: Initiate request
 	}
 }
