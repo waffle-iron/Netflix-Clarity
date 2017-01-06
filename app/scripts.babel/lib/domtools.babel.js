@@ -4,32 +4,20 @@ const MAIN_VIEW = 'mainView';
 const MUTATION_OPTIONS = { childList: true, subtree: true };
 const MUTATION_PUBSUB = 'bobtile-activated';
 
-import PubSub from './pubsub.babel.js';
-
-export default class DomTools{
+export default class DomTools {
 	constructor(props) {
 		let el = document.getElementsByClassName(MAIN_VIEW);
-		this.pubsub = new PubSub();
+		this.pubsub = props["pubsub"];
 		if(el && !!el.length){
 			
 			this.setMutationObserver(el[0], MUTATION_OPTIONS, this.hasPopoverMutation.bind(this));
-			this.pubsub.subscribe(MUTATION_PUBSUB, this.getMetaData)
+			
 		}else{
 			throw new Error('Cannot find MAIN_VIEW')
 		}
 		
 	}
-	getMetaData(e){
-		let node = e.mutation.target.parentElement;
-		if(!node) return;
-		let nameNode = node.querySelector('.bob-title');
-		let yearNode = node.querySelector(':scope .year');
-		return {
-			name: nameNode === null ? null : nameNode.textContent,
-			year:  yearNode === null ? null : yearNode.textContent,
-			inProgress: node.querySelector(':scope .progress') !== null
-		}
-	}
+
 	setMutationObserver(target, options, cb){
 		var observer = new MutationObserver(function(a) {
 			cb(a)
