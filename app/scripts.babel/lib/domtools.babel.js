@@ -4,32 +4,16 @@ const MAIN_VIEW = 'mainView';
 const MUTATION_OPTIONS = { childList: true, subtree: true };
 const MUTATION_PUBSUB = 'bobtile-activated';
 
-import PubSub from './pubsub.babel.js';
-
-export default class DomTools{
+export default class DomTools {
 	constructor(props) {
 		let el = document.getElementsByClassName(MAIN_VIEW);
-		this.pubsub = new PubSub();
+		this.pubsub = props["pubsub"];
 		if(el && !!el.length){
 			
 			this.setMutationObserver(el[0], MUTATION_OPTIONS, this.hasPopoverMutation.bind(this));
-			this.pubsub.subscribe(MUTATION_PUBSUB, (e)=>{
-				console.log(e.mutation);
-				let node = e.mutation.target.parentElement;
-				if(!node) return;
-				let title = node.querySelectorAll(':scope .bob-title');
-				let year = node.querySelectorAll(':scope .year');
-				console.log(title);
-				if(!title) throw new Error("No title found, cannot search");
-				let data = {
-					name: title[0].innerText,
-					year: year[0].innerText
-				}
-				console.log(data);
-
-			})
+			
 		}else{
-			throw new Error("Cannot find MAIN_VIEW")
+			throw new Error('Cannot find MAIN_VIEW')
 		}
 		
 	}
@@ -52,12 +36,13 @@ export default class DomTools{
 	}
 	checkForClass(elems){
 		return Array.prototype.slice.call(elems).find(function(elem){
-			return elem.classList.contains("bob-card")
+			if(!elem.classList) return false;
+			return elem.classList.contains('bob-card')
 		});
 	}
 	hasPopoverMutation(mutations){
 		let validMutation = mutations.find((mutation)=>{
-			return mutation && mutation.type === "childList" && mutation.addedNodes.length > 0 && this.checkForClass(mutation.addedNodes);
+			return mutation && mutation.type === 'childList' && mutation.addedNodes.length > 0 && this.checkForClass(mutation.addedNodes);
 		});
 
 		if(validMutation){

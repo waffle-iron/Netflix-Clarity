@@ -9,12 +9,12 @@ export default class Clarity{
 		if(!this.valid){
 			return;
 		}
-		this.renderer.render();
+
 	}
 	host(){
 		return window.location.hostname;
 	}
-	//Private
+	
 	isNetflix(){
 		console.log(this.host())
 		return /(netflix)/.test(this.host());
