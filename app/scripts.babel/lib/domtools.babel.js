@@ -83,7 +83,6 @@ export default class DomTools {
 		if(!el) return;
 		this.pubsub = props['pubsub'];
 		if(el && !!el.length){
-			
 			this.setMutationObserver(el[0], MUTATION_OPTIONS, this.hasPopoverMutation.bind(this));
 			
 		}else{
