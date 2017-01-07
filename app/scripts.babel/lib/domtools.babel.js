@@ -127,7 +127,6 @@ export default class DomTools {
 		let node = document.getElementById(el);
 		let childReview = node.querySelector(':scope .nc-review')
 		let poppedupEl = node.querySelector(':scope .bob-overlay');
-		console.log(node, childReview);
 		if(!node) return;
 		
 

@@ -16,7 +16,6 @@ export default class Clarity{
 	}
 	
 	isNetflix(){
-		console.log(this.host())
 		return /(netflix)/.test(this.host());
 	}
 }

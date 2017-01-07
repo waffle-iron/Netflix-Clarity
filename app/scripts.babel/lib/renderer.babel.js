@@ -27,7 +27,6 @@ export default class Renderer{
 			inProgress: node.querySelector(':scope .progress') !== null
 		}
 		let self = this;
-		console.log(self);
 		let result = api(data.name, data.year)
 		.then((response) =>{
 			this.domTools.injectHtml(node.id, response);
