@@ -2,7 +2,6 @@ import Renderer from './renderer.babel';
 export default class Clarity{
 	constructor(props) {
 		this.valid = this.isNetflix();
-
 	}
 
 	load(){
