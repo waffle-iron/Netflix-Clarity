@@ -1,8 +1,7 @@
 'use strict';
-const LABEL_ATTR = 'aria-label';
 import DomTools from './domtools.babel';
-const MUTATION_PUBSUB = 'bobtile-activated';
-
+import {MUTATION_PUBSUB } from './constants.babel';
+import api from './api.babel';
 import PubSub from './pubsub.babel.js';
 export default class Renderer{
 	constructor(props) {
@@ -11,7 +10,8 @@ export default class Renderer{
 			pubsub: this.pubsub
 		});
 
-		this.pubsub.subscribe(MUTATION_PUBSUB, this.getMetaData)
+		this.pubsub.subscribe(MUTATION_PUBSUB, this.getMetaData.bind(this))
+	
 	}
 
 
@@ -26,17 +26,12 @@ export default class Renderer{
 			year:  yearNode === null ? null : yearNode.textContent,
 			inProgress: node.querySelector(':scope .progress') !== null
 		}
-
-			const OMDB_ENDPOINT = 'https://www.omdbapi.com/?plot=short&r=json&tomatoes=true';
-
-			// let title = "The OA";
-			// let year = 2016
-			fetch(`${OMDB_ENDPOINT}&t=${data.name}&y=${data.year}`).then(function(res){
-				res.json().then(function(data) {  
-			        console.log(data);  
-			      }); 
-			})
-
-		//TODO: Initiate request
+		let self = this;
+		console.log(self);
+		let result = api(data.name, data.year)
+		.then((response) =>{
+			this.domTools.injectHtml(node.id, response);
+		})
+		
 	}
 }
